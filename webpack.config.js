@@ -37,5 +37,6 @@ module.exports = {
     devMiddleware: {
       writeToDisk: filePath => /index.html$/.test(filePath),
     },
+    historyApiFallback: true,
   },
 }
