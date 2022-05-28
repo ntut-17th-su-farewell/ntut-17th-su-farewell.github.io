@@ -4,7 +4,7 @@ const CopyPlugin = require("copy-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 const srcFolder = path.resolve("src")
-const distFolder = path.resolve("public")
+const distFolder = path.resolve("dist")
 const jsFileName = "index.js"
 const cssFileName = "style"
 
@@ -15,7 +15,7 @@ module.exports = {
     filename: jsFileName,
   },
   plugins: [
-    new CopyPlugin({ patterns: [{ from: path.resolve(srcFolder, "index.html"), to: distFolder }] }),
+    new CopyPlugin({ patterns: [{ from: path.resolve("public"), to: distFolder }] }),
     new MiniCssExtractPlugin({ filename: `${cssFileName}.css` }),
   ],
   module: {
@@ -23,6 +23,7 @@ module.exports = {
       {
         test: /\.html$/i,
         loader: "html-loader",
+        options: { sources: { urlFilter: () => false } },
       },
       {
         test: /\.scss$/,

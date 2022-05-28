@@ -1,5 +1,8 @@
 @use "./bootstrap.scss";
 
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+
 body,
 html {
   width: 100%;
@@ -12,4 +15,26 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  label {
+    margin-bottom: 0;
+  }
+
+  .form-control:focus {
+    border-color: $input-border-color;
+    outline: 0;
+    box-shadow: unset;
+  }
+
+  #button {
+    height: 2.25rem;
+    cursor: pointer;
+  }
 }
