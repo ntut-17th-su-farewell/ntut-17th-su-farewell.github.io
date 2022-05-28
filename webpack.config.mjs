@@ -1,15 +1,15 @@
-const path = require("path")
+import path from "path"
 
-const CopyPlugin = require("copy-webpack-plugin")
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-const { defaultMinimizerOptions } = require("html-loader")
+import CopyPlugin from "copy-webpack-plugin"
+import { defaultMinimizerOptions } from "html-loader"
+import MiniCssExtractPlugin from "mini-css-extract-plugin"
 
 const srcFolder = path.resolve("src")
 const distFolder = path.resolve("dist")
 const jsFileName = "index"
 const cssFileName = "style"
 
-module.exports = {
+export default {
   entry: [path.resolve(srcFolder, "js", `${jsFileName}.ts`), path.resolve(srcFolder, "scss", `${cssFileName}.scss`)],
   output: {
     path: distFolder,

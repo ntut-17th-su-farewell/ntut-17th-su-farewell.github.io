@@ -1,6 +1,5 @@
 import NamePage from "../html/name.html"
 import QuestionPage from "../html/question.html"
-
 import { Routes } from "./types"
 
 export default {
