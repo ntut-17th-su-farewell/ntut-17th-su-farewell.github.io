@@ -1,14 +1,14 @@
-import { AppState, Routes } from "./types.js"
+import { Routes, State } from "./types"
 
 export default class Router {
   routes: Routes
-  state: AppState
-  container: HTMLDivElement
+  state: State
+  containerEl: HTMLDivElement
 
-  constructor(routes: Routes, state: AppState, container: HTMLDivElement) {
+  constructor({ routes, state, containerEl }: { routes: Routes; state: State; containerEl: HTMLDivElement }) {
     this.routes = routes
     this.state = state
-    this.container = container
+    this.containerEl = containerEl
   }
 
   push(path: string) {
@@ -26,8 +26,12 @@ export default class Router {
 
     if (this.state.currentPath !== newPath) {
       const newRoute = this.routes[newPath]
-      this.container.innerHTML = newRoute.html
+      this.containerEl.innerHTML = newRoute.html
       newRoute.initialize(this)
     }
+  }
+
+  setBackground(imagePath: string) {
+    this.containerEl.style.backgroundImage = imagePath
   }
 }

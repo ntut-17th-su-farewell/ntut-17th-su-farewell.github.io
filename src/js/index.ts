@@ -1,11 +1,11 @@
-import Router from "./Router.js"
-import route from "./route.js"
-import  state from "./state.js"
+import Router from "./Router"
+import routes from "./routes"
+import state from "./state"
 
 if (window.location.pathname == "/") history.replaceState({}, "", "name")
 
-const container = <HTMLDivElement>document.getElementById("container")!
+const containerEl = <HTMLDivElement>document.getElementById("container")!
 
-const router = new Router(route,state, container)
+const router = new Router({routes, state, containerEl})
 
 router.onPathChange()

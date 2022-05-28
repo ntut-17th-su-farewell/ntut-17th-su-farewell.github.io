@@ -9,3 +9,4 @@ importOrder:
   - "^\\.{1,2}/.+\\.js$"
 importOrderSeparation: true
 importOrderSortSpecifiers: true
+importOrderParserPlugins: ["typescript"]

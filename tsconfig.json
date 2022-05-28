@@ -5,7 +5,6 @@
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
@@ -13,5 +12,5 @@
     "isolatedModules": true,
     "incremental": true
   },
-  "include": ["src/js/*.ts"],
+  "include": ["src/js/*.ts"]
 }
