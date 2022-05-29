@@ -4,8 +4,8 @@ import state from "./state"
 
 if (window.location.pathname == "/") history.replaceState({}, "", "name")
 
-const containerEl = <HTMLDivElement>document.getElementById("container")!
+state.containerEl = <HTMLDivElement>document.getElementById("container")!
 
-const router = new Router({ routes, state, containerEl })
+const router = new Router(routes)
 
 router.onPathChange()

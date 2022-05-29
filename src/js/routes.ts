@@ -3,6 +3,7 @@ import ByePage from "../html/bye.html"
 import MessagesPage from "../html/message.html"
 import NamePage from "../html/name.html"
 import QuestionPage from "../html/question.html"
+import state from "./state"
 import { MessageBox, Routes } from "./types"
 
 function findMessageBox(name: string): MessageBox {
@@ -14,7 +15,7 @@ export default {
     html: NamePage,
     onMount: router => {
       router.setBackground("name")
-      router.containerEl.classList.add("input-container")
+      state.containerEl.classList.add("input-container")
 
       document.getElementById("button")!.onclick = () => {
         const name = (<HTMLInputElement>document.getElementById("name-input")).value
@@ -24,24 +25,24 @@ export default {
           return
         }
 
-        router.state.name = name
+        state.name = name
         router.push("question")
       }
     },
-    onCleanup: router => router.containerEl.classList.remove("input-container"),
+    onCleanup: router => state.containerEl.classList.remove("input-container"),
   },
   question: {
     html: QuestionPage,
     onMount: router => {
-      if (router.state.name == null) {
+      if (state.name == null) {
         router.replace("name")
         return
       }
 
-      const messageBox = findMessageBox(router.state.name!)
+      const messageBox = findMessageBox(state.name!)
 
       router.setBackground("question")
-      router.containerEl.classList.add("input-container")
+      state.containerEl.classList.add("input-container")
       document.getElementById("question")!.innerText = messageBox.question
 
       document.getElementById("button")!.onclick = () => {
@@ -52,28 +53,28 @@ export default {
           return
         }
 
-        router.state.authorized = true
+        state.authorized = true
         router.push("messages")
       }
     },
-    onCleanup: router => router.containerEl.classList.remove("input-container"),
+    onCleanup: router => state.containerEl.classList.remove("input-container"),
   },
   messages: {
     html: MessagesPage,
     onMount: router => {
-      router.containerEl.classList.add("message-container")
+      state.containerEl.classList.add("message-container")
 
-      if (router.state.name == null) {
+      if (state.name == null) {
         router.replace("name")
         return
       }
 
-      if (router.state.authorized == false) {
+      if (state.authorized == false) {
         router.replace("question")
         return
       }
 
-      const messageBox = findMessageBox(router.state.name!)
+      const messageBox = findMessageBox(state.name!)
       const messageEl = document.getElementById("message")!
       messageEl.innerHTML = messageBox.messages.map(message => `<div class="message-content">${message}</div>`).join("")
       const messageContentEls = messageEl.children
@@ -82,7 +83,7 @@ export default {
       const displayMessage = () => {
         if (currentMessageIndex > 0) messageContentEls[currentMessageIndex - 1].classList.add("previous")
         messageContentEls[currentMessageIndex].classList.remove("next")
-        router.setBackground(`${router.state.name}/${currentMessageIndex + 1}`)
+        router.setBackground(`${state.name}/${currentMessageIndex + 1}`)
       }
 
       for (const children of messageContentEls) children.classList.add("next")
@@ -98,7 +99,7 @@ export default {
         }
       }
     },
-    onCleanup: router => router.containerEl.classList.remove("message-container"),
+    onCleanup: router => state.containerEl.classList.remove("message-container"),
   },
   bye: {
     html: ByePage,

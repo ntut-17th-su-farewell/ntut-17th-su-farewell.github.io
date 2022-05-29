@@ -1,14 +1,11 @@
-import { Routes, State } from "./types"
+import state from "./state"
+import { Routes } from "./types"
 
 export default class Router {
   routes: Routes
-  state: State
-  containerEl: HTMLDivElement
 
-  constructor({ routes, state, containerEl }: { routes: Routes; state: State; containerEl: HTMLDivElement }) {
+  constructor(routes: Routes) {
     this.routes = routes
-    this.state = state
-    this.containerEl = containerEl
   }
 
   push(path: string) {
@@ -24,17 +21,17 @@ export default class Router {
   onPathChange() {
     const newPath = window.location.pathname.replace(/\//g, "")
 
-    if (this.state.currentPath != newPath) {
-      const oldRoute = this.routes[this.state.currentPath]
+    if (state.currentPath != newPath) {
+      const oldRoute = this.routes[state.currentPath]
       const newRoute = this.routes[newPath]
 
       if (oldRoute?.onCleanup != undefined) oldRoute.onCleanup(this)
-      this.containerEl.innerHTML = newRoute.html
+      state.containerEl.innerHTML = newRoute.html
       if (newRoute?.onMount != undefined) newRoute.onMount(this)
     }
   }
 
   setBackground(imagePath: string) {
-    this.containerEl.style.backgroundImage = `url(img/backgrounds/${imagePath}.jpg)`
+    state.containerEl.style.backgroundImage = `url(img/backgrounds/${imagePath}.jpg)`
   }
 }
