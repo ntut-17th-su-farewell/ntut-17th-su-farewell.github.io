@@ -1,15 +1,18 @@
 import NamePage from "../html/name.html"
 import QuestionPage from "../html/question.html"
 import { Routes } from "./types"
+import messages from "../data/messages.json"
 
+messages
 export default {
   name: {
     html: NamePage,
     initialize: router => {
+      router.setBackground("name")
+
       document.getElementById("button")!.onclick = () => {
         router.state.name = (<HTMLInputElement>document.getElementById("name-input")).value
         router.push("question")
-        router.setBackground("question")
       }
     },
   },
@@ -21,9 +24,11 @@ export default {
         return
       }
 
+      router.setBackground("name")
+
       document.getElementById("button")!.onclick = () => {
         router.state.name = (<HTMLInputElement>document.getElementById("name-input")).value
-        router.push("question")
+        router.push("messages")
       }
     },
   },

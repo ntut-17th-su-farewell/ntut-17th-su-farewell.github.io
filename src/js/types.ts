@@ -8,3 +8,5 @@ export type State = {
 
 type Route = { html: string; initialize: (router: Router) => void }
 export type Routes = { [key: string]: Route }
+
+export type Message = { from: string; content: string }

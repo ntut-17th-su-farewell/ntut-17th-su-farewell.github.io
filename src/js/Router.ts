@@ -32,6 +32,7 @@ export default class Router {
   }
 
   setBackground(imagePath: string) {
-    this.containerEl.style.backgroundImage = imagePath
+    this.containerEl.style.backgroundImage = `url(img/background/${imagePath}.jpg)`
+    console.log(getComputedStyle(this.containerEl).backgroundImage)
   }
 }

@@ -47,7 +47,7 @@ export default {
     new MiniCssExtractPlugin({ filename: `${cssFileName}.css` }),
   ],
   devServer: {
-    static: { directory: "./" },
+    static: { directory: distFolder },
     compress: true,
     port: 80,
     historyApiFallback: true,
