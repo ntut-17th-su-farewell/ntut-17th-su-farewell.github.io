@@ -1,7 +1,7 @@
 import { State } from "./types"
 
 export default {
-  messageBox: null,
+  name: null,
   authorized: false,
   currentPath: "",
 } as State

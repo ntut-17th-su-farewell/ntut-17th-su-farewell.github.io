@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    // Type 'HTMLCollection' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.ts(2802)
+    "target": "es2015",
     "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": true,
     "strict": true,

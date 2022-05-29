@@ -24,15 +24,17 @@ export default class Router {
   onPathChange() {
     const newPath = window.location.pathname.replace(/\//g, "")
 
-    if (this.state.currentPath !== newPath) {
+    if (this.state.currentPath != newPath) {
+      const oldRoute = this.routes[this.state.currentPath]
       const newRoute = this.routes[newPath]
+
+      if (oldRoute?.onCleanup != undefined) oldRoute.onCleanup(this)
       this.containerEl.innerHTML = newRoute.html
-      newRoute.onMount(this)
+      if (newRoute?.onMount != undefined) newRoute.onMount(this)
     }
   }
 
   setBackground(imagePath: string) {
     this.containerEl.style.backgroundImage = `url(img/backgrounds/${imagePath}.jpg)`
-    console.log(getComputedStyle(this.containerEl).backgroundImage)
   }
 }

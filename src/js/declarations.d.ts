@@ -4,7 +4,6 @@ declare module "*.html" {
 }
 
 declare module "*message-boxes.json" {
-  type MessageBox = import('./types').MessageBox
-  const value: { [key: string]: MessageBox }
+  const value: { [key: string]: import('./types').MessageBox }
   export default value
 }
