@@ -1,12 +1,12 @@
 import Router from "./Router"
 
 export type State = {
-  name: string | null
+  messageBox: MessageBox | null
   authorized: boolean
   currentPath: string
 }
 
-type Route = { html: string; initialize: (router: Router) => void }
+type Route = { html: string; onMount: (router: Router) => void; onCleanup?: (router: Router) => void }
 export type Routes = { [key: string]: Route }
 
-export type Message = { from: string; content: string }
+export type MessageBox = { question: string; answer: string; messages: string[] }

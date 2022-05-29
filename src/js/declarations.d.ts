@@ -3,7 +3,8 @@ declare module "*.html" {
   export default value
 }
 
-declare module "../data/messages.json" {
-  const value: { [key: string]: import('./types').Message }
+declare module "*message-boxes.json" {
+  type MessageBox = import('./types').MessageBox
+  const value: { [key: string]: MessageBox }
   export default value
 }
