@@ -10,7 +10,7 @@ const jsFileName = "index"
 const cssFileName = "style"
 
 export default {
-  entry: [path.resolve(srcFolder, "js", `${jsFileName}.ts`), path.resolve(srcFolder, "scss", `${cssFileName}.scss`)],
+  entry: [path.resolve(srcFolder, "ts", `${jsFileName}.ts`), path.resolve(srcFolder, "scss", `${cssFileName}.scss`)],
   output: {
     path: distFolder,
     filename: `${jsFileName}.js`,
@@ -52,4 +52,5 @@ export default {
     port: 80,
     historyApiFallback: true,
   },
+  devtool: "source-map",
 }
