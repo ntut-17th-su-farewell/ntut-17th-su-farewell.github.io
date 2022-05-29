@@ -4,6 +4,6 @@ import state from "./state"
 
 if (window.location.pathname == "/") history.replaceState({}, "", "name")
 
-const router = new Router(routes)
+const router = new Router(routes, state)
 
 router.onPathChange()

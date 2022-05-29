@@ -1,11 +1,12 @@
-import state from "./state"
-import { Routes } from "./types"
+import { Routes, State } from "./types"
 
 export default class Router {
   routes: Routes
+  state: State
 
-  constructor(routes: Routes) {
+  constructor(routes: Routes, state: State) {
     this.routes = routes
+    this.state = state
   }
 
   push(path: string) {
@@ -21,17 +22,17 @@ export default class Router {
   onPathChange() {
     const newPath = window.location.pathname.replace(/\//g, "")
 
-    if (state.currentPath != newPath) {
-      const oldRoute = this.routes[state.currentPath]
+    if (this.state.currentPath != newPath) {
+      const oldRoute = this.routes[this.state.currentPath]
       const newRoute = this.routes[newPath]
 
       if (oldRoute?.onCleanup != undefined) oldRoute.onCleanup(this)
-      state.containerEl.innerHTML = newRoute.html
+      this.state.containerEl.innerHTML = newRoute.html
       if (newRoute?.onMount != undefined) newRoute.onMount(this)
     }
   }
 
   setBackground(imagePath: string) {
-    state.containerEl.style.backgroundImage = `url(img/backgrounds/${imagePath}.jpg)`
+    this.state.containerEl.style.backgroundImage = `url(img/backgrounds/${imagePath}.jpg)`
   }
 }
