@@ -29,7 +29,7 @@ export default {
         router.push("question")
       }
     },
-    onCleanup: router => state.containerEl.classList.remove("input-container"),
+    onCleanup: () => state.containerEl.classList.remove("input-container"),
   },
   question: {
     html: QuestionPage,
@@ -57,7 +57,7 @@ export default {
         router.push("messages")
       }
     },
-    onCleanup: router => state.containerEl.classList.remove("input-container"),
+    onCleanup: () => state.containerEl.classList.remove("input-container"),
   },
   messages: {
     html: MessagesPage,
@@ -99,7 +99,7 @@ export default {
         }
       }
     },
-    onCleanup: router => state.containerEl.classList.remove("message-container"),
+    onCleanup: () => state.containerEl.classList.remove("message-container"),
   },
   bye: {
     html: ByePage,
