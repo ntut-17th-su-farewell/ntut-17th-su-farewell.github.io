@@ -7,8 +7,7 @@ export type State = {
 }
 
 export type ButtonClickHandler = (router: Router) => string | null
-
-abstract class StatefulButtonClickHandler {
+export abstract class StatefulButtonClickHandler {
   abstract run: ButtonClickHandler
 }
 

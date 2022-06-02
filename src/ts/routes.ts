@@ -19,12 +19,12 @@ export default {
       const secretWords = (<HTMLInputElement>document.getElementById("magic-word-input")).value
 
       if (!Object.keys(messageBoxes).includes(name)) {
-        alert("名字輸入錯了 QQ")
+        alert("名字輸入錯了 QAQ")
         return
       }
 
       if (findMessageBox(name).secretWords != secretWords) {
-        alert("通關密語錯了，偷看壞壞哦")
+        alert("通關密語錯了，偷看壞壞哦！")
         return
       }
 
@@ -42,7 +42,7 @@ export default {
   messages: {
     html: MessagesPage,
     background: router => `${router.state.name}/1`,
-    onButtonClick: class MessageButtonClickHandler {
+    onButtonClick: class {
       currentMessageIndex = 0
       messageBox: MessageBox
       messageContentEls: HTMLCollection
@@ -63,11 +63,13 @@ export default {
         const messageContentEls = messageEl.children
 
         for (const children of messageContentEls) children.classList.add("next")
-        this.displayNextMessage()
 
         this.messageBox = messageBox
         this.messageContentEls = messageContentEls
         this.router = router
+
+        // this.displayNextMessage() requires this.messageContentEls
+        this.displayNextMessage()
       }
 
       displayNextMessage() {
@@ -77,17 +79,18 @@ export default {
       }
 
       run() {
+        this.currentMessageIndex++
         if (this.currentMessageIndex < this.messageBox.messages.length) {
           this.displayNextMessage()
           return null
         } else {
-          return "bye"
+          return "ending"
         }
       }
     },
     containerClass: "message-page"
   },
-  bye: {
+  ending: {
     html: EndingPage,
     background: "ending",
     containerClass: "message-page"

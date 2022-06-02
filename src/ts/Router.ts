@@ -1,9 +1,4 @@
-import { ButtonClickHandler, Routes, State } from "./types"
-
-function getButtonClickHandler(handler: any): ButtonClickHandler {
-  const anInstance = new handler()
-  return anInstance.run ?? handler
-}
+import { ButtonClickHandler, Routes, State, StatefulButtonClickHandler } from "./types"
 
 export default class Router {
   routes: Routes
@@ -24,14 +19,13 @@ export default class Router {
 
     if (this.state.currentPath != newPath) {
       const newRoute = this.routes[newPath]
-      console.log(this.routes)
 
       this.state.containerEl.className = newRoute.containerClass
       this.state.containerEl.innerHTML = newRoute.html
       this.setBackground(typeof newRoute.background == "string" ? newRoute.background : newRoute.background(this))
 
       if (newRoute.onButtonClick != undefined) {
-        const buttonClickHandler = getButtonClickHandler(newRoute.onButtonClick)
+        const buttonClickHandler = this.getButtonClickHandler(newRoute.onButtonClick)
 
         document.getElementById("button")!.onclick = () => {
           const newPath = buttonClickHandler(this)
@@ -45,5 +39,17 @@ export default class Router {
 
   setBackground(imagePath: string) {
     this.state.containerEl.style.backgroundImage = `url(img/backgrounds/${imagePath}.jpg)`
+  }
+
+  getButtonClickHandler(handler: any): ButtonClickHandler {
+    try {
+      const handlerInstance = new handler(this)
+      return (handlerInstance as StatefulButtonClickHandler).run.bind(handlerInstance) ?? handler
+    } catch (error: any) {
+      if (error.name != "TypeError") throw error
+
+      // handler is a arrow function
+      return handler
+    }
   }
 }
