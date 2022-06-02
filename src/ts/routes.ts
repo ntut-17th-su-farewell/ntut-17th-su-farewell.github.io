@@ -16,7 +16,7 @@ export default {
     background: "index",
     onButtonClick: router => {
       const name = (<HTMLInputElement>document.getElementById("name-input")).value
-      const secretWords = (<HTMLInputElement>document.getElementById("magic word")).value
+      const secretWords = (<HTMLInputElement>document.getElementById("magic-word-input")).value
 
       if (!Object.keys(messageBoxes).includes(name)) {
         alert("名字輸入錯了 QQ")
@@ -31,13 +31,13 @@ export default {
       router.state.name = name
       return "starting"
     },
-    containerClass: "input-container"
+    containerClass: "login-page"
   },
   starting: {
     html: StartingPage,
     background: "index",
     onButtonClick: () => "messages",
-    containerClass: "message-container"
+    containerClass: "message-page"
   },
   messages: {
     html: MessagesPage,
@@ -85,11 +85,11 @@ export default {
         }
       }
     },
-    containerClass: "message-container"
+    containerClass: "message-page"
   },
   bye: {
     html: EndingPage,
     background: "ending",
-    containerClass: "message-container"
+    containerClass: "message-page"
   },
 } as Routes

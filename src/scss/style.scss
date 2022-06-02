@@ -12,81 +12,87 @@ html {
 
 #container {
   height: 100%;
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-image 500ms;
-}
-
-.input-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  background-position: center;
-  background-size: cover;
+  justify-content: center;
+  transition: background-image 500ms;
 
-  label {
-    margin-bottom: 0;
-  }
+  &.login-page {
+    gap: 2rem;
+    background-position: center;
+    background-size: cover;
 
-  input {
-    background: rgba(0, 0, 0, 10%);
-    border: 2px rgba(0, 0, 0, 10%) solid;
-    box-shadow: 0 0 1rem 0.25rem rgba(0, 0, 0, 10%);
-    backdrop-filter: blur(5px);
-
-    width: 65%;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem;
-
-    text-align: center;
-    color: rgba(255, 255, 255, 0.87);
-  }
-
-  .form-control:focus-visible {
-    outline: none;
-    border-color: rgba(0, 0, 0, 25%);
-    box-shadow: 0 0 1rem 0.25rem rgba(0, 0, 0, 20%);
-  }
-
-  #button {
-    height: 2.25rem;
-    cursor: pointer;
-  }
-}
-
-.message-container {
-  #message {
-    position: relative;
-    width: 100%;
-    height: 50%;
-    overflow: hidden;
-
-    .message-content {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
+    .input-container {
       display: flex;
-      align-items: center;
-      transition: 500ms ease-out;
+      flex-direction: column;
+      width: 65vw;
+      gap: 1rem;
 
-      &.previous {
-        opacity: 0;
-        transform: translateY(-20vh);
+      label {
+        text-align: center;
       }
 
-      &.next {
-        opacity: 0;
-        transform: translateY(20vh);
+      input {
+        background: rgba(0, 0, 0, 10%);
+        border: 2px rgba(0, 0, 0, 10%) solid;
+        box-shadow: 0 0 1rem 0.25rem rgba(0, 0, 0, 10%);
+        backdrop-filter: blur(5px);
+
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+
+        text-align: center;
+        color: rgba(255, 255, 255, 0.87);
+
+        &:focus-visible {
+          outline: none;
+          border-color: rgba(0, 0, 0, 25%);
+          box-shadow: 0 0 1rem 0.25rem rgba(0, 0, 0, 20%);
+        }
       }
+    }
+
+    #button {
+      height: 2.25rem;
+      cursor: pointer;
     }
   }
 
-  #button {
-    // Higher than .message.next
-    z-index: 1;
+  &.message-page {
+    padding: 3rem;
+
+    #message {
+      position: relative;
+      width: 100%;
+      height: 50%;
+      overflow: hidden;
+
+      .message-content {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        display: flex;
+        align-items: center;
+        transition: 500ms ease-out;
+
+        &.previous {
+          opacity: 0;
+          transform: translateY(-20vh);
+        }
+
+        &.next {
+          opacity: 0;
+          transform: translateY(20vh);
+        }
+      }
+    }
+
+    #button {
+      // Higher than .message.next
+      z-index: 1;
+    }
   }
 }
