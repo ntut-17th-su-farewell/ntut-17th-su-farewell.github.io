@@ -12,16 +12,18 @@ html {
 
 #container {
   height: 100%;
+
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+
+  background-size: cover;
+  background-position: center;
   transition: background-image 500ms;
 
   &.login-page {
     gap: 2rem;
-    background-position: center;
-    background-size: cover;
 
     .input-container {
       display: flex;
