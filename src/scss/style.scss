@@ -31,10 +31,24 @@ html {
     margin-bottom: 0;
   }
 
-  .form-control:focus {
-    border-color: $input-border-color;
-    outline: 0;
-    box-shadow: unset;
+  input {
+    background: rgba(0, 0, 0, 10%);
+    border: 2px rgba(0, 0, 0, 10%) solid;
+    box-shadow: 0 0 1rem 0.25rem rgba(0, 0, 0, 10%);
+    backdrop-filter: blur(5px);
+
+    width: 65%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+
+    text-align: center;
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .form-control:focus-visible {
+    outline: none;
+    border-color: rgba(0, 0, 0, 25%);
+    box-shadow: 0 0 1rem 0.25rem rgba(0, 0, 0, 20%);
   }
 
   #button {

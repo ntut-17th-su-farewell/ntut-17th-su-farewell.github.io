@@ -2,12 +2,22 @@ import Router from "./Router"
 
 export type State = {
   name: string | null
-  authorized: boolean
   currentPath: string
   containerEl: HTMLDivElement
 }
 
-type Route = { html: string; onMount?: (router: Router) => void; onCleanup?: (router: Router) => void }
+export type ButtonClickHandler = (router: Router) => string | null
+
+abstract class StatefulButtonClickHandler {
+  abstract run: ButtonClickHandler
+}
+
+type Route = {
+  html: string
+  background: string | ((router: Router) => string)
+  onButtonClick?: ButtonClickHandler | { new (args: any): StatefulButtonClickHandler }
+  containerClass: string
+}
 export type Routes = { [key: string]: Route }
 
-export type MessageBox = { question: string; answer: string; messages: string[] }
+export type MessageBox = { secretWords: string; messages: string[] }

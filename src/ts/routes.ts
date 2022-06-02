@@ -1,8 +1,9 @@
 import messageBoxes from "../data/message-boxes.json"
-import ByePage from "../html/bye.html"
+import EndingPage from "../html/ending.html"
+import LoginPage from "../html/login.html"
 import MessagesPage from "../html/message.html"
-import NamePage from "../html/name.html"
-import QuestionPage from "../html/question.html"
+import StartingPage from "../html/starting.html"
+import Router from "./Router"
 import { MessageBox, Routes } from "./types"
 
 function findMessageBox(name: string): MessageBox {
@@ -10,97 +11,85 @@ function findMessageBox(name: string): MessageBox {
 }
 
 export default {
-  name: {
-    html: NamePage,
-    onMount: router => {
-      router.setBackground("name")
-      router.state.containerEl.classList.add("input-container")
+  login: {
+    html: LoginPage,
+    background: "index",
+    onButtonClick: router => {
+      const name = (<HTMLInputElement>document.getElementById("name-input")).value
+      const secretWords = (<HTMLInputElement>document.getElementById("magic word")).value
 
-      document.getElementById("button")!.onclick = () => {
-        const name = (<HTMLInputElement>document.getElementById("name-input")).value
-
-        if (!Object.keys(messageBoxes).includes(name)) {
-          alert("名字輸入錯了 QQ")
-          return
-        }
-
-        router.state.name = name
-        router.push("question")
-      }
-    },
-    onCleanup: router => router.state.containerEl.classList.remove("input-container"),
-  },
-  question: {
-    html: QuestionPage,
-    onMount: router => {
-      if (router.state.name == null) {
-        router.replace("name")
+      if (!Object.keys(messageBoxes).includes(name)) {
+        alert("名字輸入錯了 QQ")
         return
       }
 
-      const messageBox = findMessageBox(router.state.name!)
-
-      router.setBackground("question")
-      router.state.containerEl.classList.add("input-container")
-      document.getElementById("question")!.innerText = messageBox.question
-
-      document.getElementById("button")!.onclick = () => {
-        const answer = (<HTMLInputElement>document.getElementById("answer-input")).value
-
-        if (answer != messageBox.answer) {
-          alert("答案錯了")
-          return
-        }
-
-        router.state.authorized = true
-        router.push("messages")
+      if (findMessageBox(name).secretWords != secretWords) {
+        alert("通關密語錯了，偷看壞壞哦")
+        return
       }
+
+      router.state.name = name
+      return "starting"
     },
-    onCleanup: router => router.state.containerEl.classList.remove("input-container"),
+    containerClass: "input-container"
+  },
+  starting: {
+    html: StartingPage,
+    background: "index",
+    onButtonClick: () => "messages",
+    containerClass: "message-container"
   },
   messages: {
     html: MessagesPage,
-    onMount: router => {
-      router.state.containerEl.classList.add("message-container")
+    background: router => `${router.state.name}/1`,
+    onButtonClick: class MessageButtonClickHandler {
+      currentMessageIndex = 0
+      messageBox: MessageBox
+      messageContentEls: HTMLCollection
+      router: Router
 
-      if (router.state.name == null) {
-        router.replace("name")
-        return
+      constructor(router: Router) {
+        const messageBox = findMessageBox(router.state.name!)
+        const messageEl = document.getElementById("message")!
+        messageEl.innerHTML = messageBox.messages
+          .map(
+            message =>
+              `<div class="message-content">${message
+                .split("\n")
+                .map(line => `<p>${line}</p>`)
+                .join("")}</div>`
+          )
+          .join("")
+        const messageContentEls = messageEl.children
+
+        for (const children of messageContentEls) children.classList.add("next")
+        this.displayNextMessage()
+
+        this.messageBox = messageBox
+        this.messageContentEls = messageContentEls
+        this.router = router
       }
 
-      if (router.state.authorized == false) {
-        router.replace("question")
-        return
+      displayNextMessage() {
+        if (this.currentMessageIndex > 0) this.messageContentEls[this.currentMessageIndex - 1].classList.add("previous")
+        this.messageContentEls[this.currentMessageIndex].classList.remove("next")
+        this.router.setBackground(`${this.router.state.name}/${this.currentMessageIndex + 1}`)
       }
 
-      const messageBox = findMessageBox(router.state.name!)
-      const messageEl = document.getElementById("message")!
-      messageEl.innerHTML = messageBox.messages.map(message => `<div class="message-content">${message}</div>`).join("")
-      const messageContentEls = messageEl.children
-
-      let currentMessageIndex = 0
-      const displayMessage = () => {
-        if (currentMessageIndex > 0) messageContentEls[currentMessageIndex - 1].classList.add("previous")
-        messageContentEls[currentMessageIndex].classList.remove("next")
-        router.setBackground(`${router.state.name}/${currentMessageIndex + 1}`)
-      }
-
-      for (const children of messageContentEls) children.classList.add("next")
-      displayMessage()
-
-      document.getElementById("button")!.onclick = () => {
-        currentMessageIndex++
-
-        if (currentMessageIndex < messageBox.messages.length) {
-          displayMessage()
+      run() {
+        if (this.currentMessageIndex < this.messageBox.messages.length) {
+          this.displayNextMessage()
+          return null
         } else {
-          router.push("bye")
+          return "bye"
         }
       }
     },
-    onCleanup: router => router.state.containerEl.classList.remove("message-container"),
+    containerClass: "message-container"
   },
   bye: {
-    html: ByePage,
+    html: EndingPage,
+    background: "ending",
+    containerClass: "message-container"
   },
 } as Routes
