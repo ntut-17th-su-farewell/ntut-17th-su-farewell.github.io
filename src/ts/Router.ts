@@ -1,4 +1,4 @@
-import { ButtonClickHandler, Routes, State, StatefulButtonClickHandler } from "./types"
+import { ButtonClickHandler, Routes, State } from "./types"
 
 export default class Router {
   routes: Routes
