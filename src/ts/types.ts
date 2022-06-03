@@ -14,7 +14,7 @@ export abstract class StatefulButtonClickHandler {
 type Route = {
   html: string
   background: string | ((router: Router) => string)
-  onButtonClick?: ButtonClickHandler | { new (args: any): StatefulButtonClickHandler }
+  buttonClickHandler?: ButtonClickHandler | { new (args: any): StatefulButtonClickHandler }
   containerClass: string
 }
 export type Routes = { [key: string]: Route }

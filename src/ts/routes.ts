@@ -14,7 +14,8 @@ export default {
   login: {
     html: LoginPage,
     background: "index",
-    onButtonClick: router => {
+    containerClass: "login-page",
+    buttonClickHandler: function (router) {
       const name = (<HTMLInputElement>document.getElementById("name-input")).value
       const secretWords = (<HTMLInputElement>document.getElementById("magic-word-input")).value
 
@@ -31,18 +32,18 @@ export default {
       router.state.name = name
       return "starting"
     },
-    containerClass: "login-page"
   },
   starting: {
     html: StartingPage,
     background: "index",
-    onButtonClick: () => "messages",
-    containerClass: "message-page"
+    containerClass: "message-page",
+    buttonClickHandler: () => "messages",
   },
   messages: {
     html: MessagesPage,
     background: router => `${router.state.name}/1`,
-    onButtonClick: class {
+    containerClass: "message-page",
+    buttonClickHandler: class {
       currentMessageIndex = 0
       messageBox: MessageBox
       messageContentEls: HTMLCollection
@@ -88,11 +89,10 @@ export default {
         }
       }
     },
-    containerClass: "message-page"
   },
   ending: {
     html: EndingPage,
     background: "ending",
-    containerClass: "message-page"
+    containerClass: "message-page",
   },
 } as Routes

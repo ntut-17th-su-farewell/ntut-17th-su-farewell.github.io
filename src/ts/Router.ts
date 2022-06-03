@@ -10,30 +10,24 @@ export default class Router {
   }
 
   push(path: string) {
+    if (this.state.currentPath == path) return
+
     history.pushState({}, "", path)
-    this.onPathChange()
-  }
+    this.state.currentPath = path
 
-  onPathChange() {
-    const newPath = window.location.pathname.replace(/\//g, "")
+    const newRoute = this.routes[path]
 
-    if (this.state.currentPath != newPath) {
-      const newRoute = this.routes[newPath]
+    this.state.containerEl.className = newRoute.containerClass
+    this.state.containerEl.innerHTML = newRoute.html
+    this.setBackground(typeof newRoute.background == "string" ? newRoute.background : newRoute.background(this))
 
-      this.state.containerEl.className = newRoute.containerClass
-      this.state.containerEl.innerHTML = newRoute.html
-      this.setBackground(typeof newRoute.background == "string" ? newRoute.background : newRoute.background(this))
+    if (newRoute.buttonClickHandler != undefined) {
+      const buttonClickHandler = this.getButtonClickHandler(newRoute.buttonClickHandler)
 
-      if (newRoute.onButtonClick != undefined) {
-        const buttonClickHandler = this.getButtonClickHandler(newRoute.onButtonClick)
-
-        document.getElementById("button")!.onclick = () => {
-          const newPath = buttonClickHandler(this)
-          if (newPath !== null) this.push(newPath)
-        }
+      document.getElementById("button")!.onclick = () => {
+        const newPath = buttonClickHandler(this)
+        if (newPath != null) this.push(newPath)
       }
-
-      this.state.currentPath = newPath
     }
   }
 
@@ -42,13 +36,10 @@ export default class Router {
   }
 
   getButtonClickHandler(handler: any): ButtonClickHandler {
-    try {
+    if (!Object.getOwnPropertyDescriptor(handler, "prototype")?.writable) {
       const handlerInstance = new handler(this)
-      return (handlerInstance as StatefulButtonClickHandler).run.bind(handlerInstance) ?? handler
-    } catch (error: any) {
-      if (error.name != "TypeError") throw error
-
-      // handler is a arrow function
+      return handlerInstance.run.bind(handlerInstance)
+    } else {
       return handler
     }
   }
