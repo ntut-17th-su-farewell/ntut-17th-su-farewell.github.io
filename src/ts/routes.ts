@@ -1,6 +1,6 @@
 import messageBoxes from "../data/message-boxes.json"
 import EndingPage from "../html/ending.html"
-import LoginPage from "../html/login.html"
+import LandingPage from "../html/landing.html"
 import MessagesPage from "../html/message.html"
 import StartingPage from "../html/starting.html"
 import Router from "./Router"
@@ -11,20 +11,20 @@ function findMessageBox(name: string): MessageBox {
 }
 
 export default {
-  login: {
-    html: LoginPage,
+  "": {
+    html: LandingPage,
     background: "index",
-    containerClass: "login-page",
+    containerClass: "index-page",
     buttonClickHandler: function (router) {
       const name = (<HTMLInputElement>document.getElementById("name-input")).value
-      const secretWords = (<HTMLInputElement>document.getElementById("magic-word-input")).value
+      const passcode = (<HTMLInputElement>document.getElementById("magic-word-input")).value
 
       if (!Object.keys(messageBoxes).includes(name)) {
         alert("名字輸入錯了 QAQ")
         return
       }
 
-      if (findMessageBox(name).secretWords != secretWords) {
+      if (findMessageBox(name).passcode != passcode) {
         alert("通關密語錯了，偷看壞壞哦！")
         return
       }
@@ -56,8 +56,8 @@ export default {
           .map(
             message =>
               `<div class="message-content">${message
-                .split("\n")
-                .map(line => `<p>${line}</p>`)
+                .split("\n\n")
+                .map(paragraph => `<p>${paragraph.replace(/\n/g, "<br>")}</p>`)
                 .join("")}</div>`
           )
           .join("")
@@ -96,3 +96,5 @@ export default {
     containerClass: "message-page",
   },
 } as Routes
+
+[]

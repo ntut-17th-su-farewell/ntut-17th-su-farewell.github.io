@@ -7,6 +7,8 @@ export default class Router {
   constructor(routes: Routes, state: State) {
     this.routes = routes
     this.state = state
+
+    this.push(window.location.pathname.replace(/^\/*(.*)\/*$/, "$1"))
   }
 
   push(path: string) {
@@ -16,6 +18,7 @@ export default class Router {
     this.state.currentPath = path
 
     const newRoute = this.routes[path]
+    console.log(newRoute)
 
     this.state.containerEl.className = newRoute.containerClass
     this.state.containerEl.innerHTML = newRoute.html
@@ -36,7 +39,10 @@ export default class Router {
   }
 
   getButtonClickHandler(handler: any): ButtonClickHandler {
-    if (!Object.getOwnPropertyDescriptor(handler, "prototype")?.writable) {
+    const handlerPrototype = Object.getOwnPropertyDescriptor(handler, "prototype")
+
+    // handlerPrototype == undefined if it is an arrow function
+    if (handlerPrototype != undefined && handlerPrototype.writable == false) {
       const handlerInstance = new handler(this)
       return handlerInstance.run.bind(handlerInstance)
     } else {
