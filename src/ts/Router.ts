@@ -35,7 +35,9 @@ export default class Router {
   }
 
   setBackground(imagePath: string) {
-    this.state.containerEl.style.backgroundImage = `url(img/backgrounds/${imagePath}.jpg)`
+    this.state.containerEl.style.backgroundImage = `url(img/backgrounds/${
+      imagePath.includes(".") ? imagePath : imagePath + ".jpg"
+    })`
   }
 
   getButtonClickHandler(handler: any): ButtonClickHandler {

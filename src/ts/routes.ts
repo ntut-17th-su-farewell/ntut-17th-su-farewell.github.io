@@ -13,7 +13,7 @@ function findMessageBox(name: string): MessageBox {
 export default {
   "": {
     html: LandingPage,
-    background: "index",
+    background: "index.png",
     containerClass: "index-page",
     buttonClickHandler: function (router) {
       const name = (<HTMLInputElement>document.getElementById("name-input")).value
@@ -35,7 +35,7 @@ export default {
   },
   starting: {
     html: StartingPage,
-    background: "index",
+    background: "index.png",
     containerClass: "message-page",
     buttonClickHandler: () => "messages",
   },
