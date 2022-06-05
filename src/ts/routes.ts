@@ -61,7 +61,6 @@ export default {
         const messageBox = findMessageBox(router.state.name!)
         const messageContainerEl = document.getElementById("message-container") as HTMLDivElement
 
-        messageContainerEl.style.visibility = "hidden"
         messageContainerEl.innerHTML = messageBox.messages
           .map(
             message =>
@@ -73,16 +72,15 @@ export default {
           .join("")
 
         const messageContentEls = [...messageContainerEl.children] as HTMLDivElement[]
-        const maximumHeight = messageContentEls.reduce((accumulator, messageContentEl) => {
+        const maximumHeight = messageContentEls.reduce((previousValue, messageContentEl) => {
           messageContentEl.style.height = "unset"
           const elHeight = messageContentEl.clientHeight
           messageContentEl.style.height = ""
 
-          if (elHeight > accumulator) return elHeight
-          else return accumulator
+          if (elHeight > previousValue) return elHeight
+          else return previousValue
         }, 0)
 
-        messageContainerEl.style.visibility = ""
         messageContainerEl.style.height = `${maximumHeight}px`
 
         this.messageBox = messageBox
