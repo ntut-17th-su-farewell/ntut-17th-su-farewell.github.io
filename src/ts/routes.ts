@@ -29,6 +29,14 @@ export default {
         return
       }
 
+      // Cache background images
+      for (let i = 1; i <= 4; i++) new Image().src = `img/backgrounds/${name}/${i}.jpg`
+      new Image().src = `img/backgrounds/ending.jpg`
+
+      const backgroundMusic = new Audio("/music/background-music.mp3")
+      backgroundMusic.loop = true
+      backgroundMusic.play()
+
       router.state.name = name
       return "starting"
     },
@@ -46,24 +54,36 @@ export default {
     buttonClickHandler: class {
       currentMessageIndex = 0
       messageBox: MessageBox
-      messageContentEls: HTMLCollection
+      messageContentEls: HTMLDivElement[]
       router: Router
 
       constructor(router: Router) {
         const messageBox = findMessageBox(router.state.name!)
-        const messageEl = document.getElementById("message")!
-        messageEl.innerHTML = messageBox.messages
+        const messageContainerEl = document.getElementById("message-container") as HTMLDivElement
+
+        messageContainerEl.style.visibility = "hidden"
+        messageContainerEl.innerHTML = messageBox.messages
           .map(
             message =>
-              `<div class="message-content">${message
+              `<div class="message-content next">${message
                 .split("\n\n")
                 .map(paragraph => `<p>${paragraph.replace(/\n/g, "<br>")}</p>`)
                 .join("")}</div>`
           )
           .join("")
-        const messageContentEls = messageEl.children
 
-        for (const children of messageContentEls) children.classList.add("next")
+        const messageContentEls = [...messageContainerEl.children] as HTMLDivElement[]
+        const maximumHeight = messageContentEls.reduce((accumulator, messageContentEl) => {
+          messageContentEl.style.height = "unset"
+          const elHeight = messageContentEl.clientHeight
+          messageContentEl.style.height = ""
+
+          if (elHeight > accumulator) return elHeight
+          else return accumulator
+        }, 0)
+
+        messageContainerEl.style.visibility = ""
+        messageContainerEl.style.height = `${maximumHeight}px`
 
         this.messageBox = messageBox
         this.messageContentEls = messageContentEls
@@ -74,8 +94,21 @@ export default {
       }
 
       displayNextMessage() {
-        if (this.currentMessageIndex > 0) this.messageContentEls[this.currentMessageIndex - 1].classList.add("previous")
-        this.messageContentEls[this.currentMessageIndex].classList.remove("next")
+        const currentMessageContentEl = this.messageContentEls[this.currentMessageIndex]
+        // https://stackoverflow.com/a/31862081
+        const triggerReflow = () => getComputedStyle(currentMessageContentEl).transform
+
+        if (this.currentMessageIndex == 0) {
+          currentMessageContentEl.style.transition = "none"
+          triggerReflow()
+          currentMessageContentEl.classList.remove("next")
+          triggerReflow()
+          currentMessageContentEl.style.transition = ""
+        } else {
+          this.messageContentEls[this.currentMessageIndex - 1].classList.add("previous")
+          currentMessageContentEl.classList.remove("next")
+        }
+
         this.router.setBackground(`${this.router.state.name}/${this.currentMessageIndex + 1}`)
       }
 
@@ -96,5 +129,3 @@ export default {
     containerClass: "message-page",
   },
 } as Routes
-
-[]
