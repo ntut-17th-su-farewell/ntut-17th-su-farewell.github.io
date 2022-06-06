@@ -18,14 +18,16 @@ export default class Router {
     this.state.currentPath = path
 
     const newRoute = this.routes[path]
-    console.log(newRoute)
 
     this.state.containerEl.className = newRoute.containerClass
     this.state.containerEl.innerHTML = newRoute.html
     this.setBackground(typeof newRoute.background == "string" ? newRoute.background : newRoute.background(this))
 
+    if (newRoute.initialize != undefined) newRoute.initialize(this)
     if (newRoute.buttonClickHandler != undefined) {
-      const buttonClickHandler = this.getButtonClickHandler(newRoute.buttonClickHandler)
+      const buttonClickHandler = (
+        "run" in newRoute.buttonClickHandler ? newRoute.buttonClickHandler.run : newRoute.buttonClickHandler
+      ).bind(newRoute)
 
       document.getElementById("button")!.onclick = () => {
         const newPath = buttonClickHandler(this)
@@ -38,17 +40,5 @@ export default class Router {
     this.state.containerEl.style.backgroundImage = `url(img/backgrounds/${
       imagePath.includes(".") ? imagePath : imagePath + ".jpg"
     })`
-  }
-
-  getButtonClickHandler(handler: any): ButtonClickHandler {
-    const handlerPrototype = Object.getOwnPropertyDescriptor(handler, "prototype")
-
-    // handlerPrototype == undefined if it is an arrow function
-    if (handlerPrototype != undefined && handlerPrototype.writable == false) {
-      const handlerInstance = new handler(this)
-      return handlerInstance.run.bind(handlerInstance)
-    } else {
-      return handler
-    }
   }
 }

@@ -47,79 +47,81 @@ export default {
     containerClass: "message-page",
     buttonClickHandler: () => "messages",
   },
-  messages: {
-    html: MessagesPage,
-    background: router => `${router.state.name}/1`,
-    containerClass: "message-page",
-    buttonClickHandler: class {
-      currentMessageIndex = 0
-      messageBox: MessageBox
-      messageContentEls: HTMLDivElement[]
-      router: Router
+  messages: class {
+    static html = MessagesPage
+    static background = router => `${router.state.name}/1`
+    static containerClass = "message-page"
 
-      constructor(router: Router) {
-        const messageBox = findMessageBox(router.state.name!)
-        const messageContainerEl = document.getElementById("message-container") as HTMLDivElement
+    static currentMessageIndex = 0
+    static messageBox: MessageBox
+    static messageContentEls: HTMLDivElement[]
+    static router: Router
 
-        messageContainerEl.innerHTML = messageBox.messages
-          .map(
-            message =>
-              `<div class="message-content next">${message
-                .split("\n\n")
-                .map(paragraph => `<p>${paragraph.replace(/\n/g, "<br>")}</p>`)
-                .join("")}</div>`
-          )
-          .join("")
+    static initialize(router: Router) {
+      const messageBox = findMessageBox(router.state.name!)
+      const messageContainerEl = document.getElementById("message-container") as HTMLDivElement
 
-        const messageContentEls = [...messageContainerEl.children] as HTMLDivElement[]
-        const maximumHeight = messageContentEls.reduce((previousValue, messageContentEl) => {
-          messageContentEl.style.height = "unset"
-          const elHeight = messageContentEl.clientHeight
-          messageContentEl.style.height = ""
+      messageContainerEl.innerHTML = messageBox.messages
+        .map(
+          message =>
+            `<div class="message-content next">${message
+              .split("\n\n")
+              .map(paragraph => `<p>${paragraph.replace(/\n/g, "<br>")}</p>`)
+              .join("")}</div>`
+        )
+        .join("")
 
-          if (elHeight > previousValue) return elHeight
-          else return previousValue
-        }, 0)
+      const messageContentEls = [...messageContainerEl.children] as HTMLDivElement[]
+      const maximumHeight = messageContentEls.reduce((previousValue, messageContentEl) => {
+        messageContentEl.style.height = "unset"
+        const elHeight = messageContentEl.clientHeight
+        messageContentEl.style.height = ""
 
-        messageContainerEl.style.height = `${maximumHeight}px`
+        if (elHeight > previousValue) return elHeight
+        else return previousValue
+      }, 0)
 
-        this.messageBox = messageBox
-        this.messageContentEls = messageContentEls
-        this.router = router
+      messageContainerEl.style.height = `${maximumHeight}px`
 
-        // this.displayNextMessage() requires this.messageContentEls
+      this.messageBox = messageBox
+      this.messageContentEls = messageContentEls
+      this.router = router
+
+      // this.displayNextMessage() requires this.messageContentEls
+      this.displayNextMessage()
+    }
+
+    static buttonClickHandler() {
+      this.currentMessageIndex++
+
+      if (this.currentMessageIndex < this.messageBox.messages.length) {
         this.displayNextMessage()
+        return null
+      } else {
+        return "ending"
+      }
+    }
+
+    static displayNextMessage() {
+      const currentMessageContentEl = this.messageContentEls[this.currentMessageIndex]
+      // https://stackoverflow.com/a/31862081
+      const triggerReflow = () => getComputedStyle(currentMessageContentEl).transform
+
+      if (this.currentMessageIndex == 0) {
+        currentMessageContentEl.style.transition = "none"
+        triggerReflow()
+        currentMessageContentEl.classList.remove("next")
+        triggerReflow()
+        currentMessageContentEl.style.transition = ""
+      } else {
+        this.messageContentEls[this.currentMessageIndex - 1].classList.add("previous")
+        currentMessageContentEl.classList.remove("next")
       }
 
-      displayNextMessage() {
-        const currentMessageContentEl = this.messageContentEls[this.currentMessageIndex]
-        // https://stackoverflow.com/a/31862081
-        const triggerReflow = () => getComputedStyle(currentMessageContentEl).transform
+      this.router.setBackground(`${this.router.state.name}/${this.currentMessageIndex + 1}`)
+    }
 
-        if (this.currentMessageIndex == 0) {
-          currentMessageContentEl.style.transition = "none"
-          triggerReflow()
-          currentMessageContentEl.classList.remove("next")
-          triggerReflow()
-          currentMessageContentEl.style.transition = ""
-        } else {
-          this.messageContentEls[this.currentMessageIndex - 1].classList.add("previous")
-          currentMessageContentEl.classList.remove("next")
-        }
 
-        this.router.setBackground(`${this.router.state.name}/${this.currentMessageIndex + 1}`)
-      }
-
-      run() {
-        this.currentMessageIndex++
-        if (this.currentMessageIndex < this.messageBox.messages.length) {
-          this.displayNextMessage()
-          return null
-        } else {
-          return "ending"
-        }
-      }
-    },
   },
   ending: {
     html: EndingPage,
