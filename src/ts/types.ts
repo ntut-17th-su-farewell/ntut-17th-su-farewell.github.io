@@ -11,10 +11,10 @@ export abstract class StatefulButtonClickHandler {
   abstract run: ButtonClickHandler
 }
 
-export interface Route {
-  html: string
-  background: string | ((router: Router) => string)
-  containerClass: string
+export abstract class Route {
+  abstract html: string
+  abstract background: string | ((router: Router) => string)
+  abstract containerClass: string
   buttonClickHandler?: ButtonClickHandler
 }
 export type Routes = { [key: string]: new (router: Router) => Route }

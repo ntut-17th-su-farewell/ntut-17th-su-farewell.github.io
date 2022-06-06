@@ -15,7 +15,10 @@ export default {
     html = LandingPage
     background = "index.png"
     containerClass = "index-page"
-    buttonClickHandler(router: Router) {
+
+    constructor(private router: Router) {}
+
+    buttonClickHandler() {
       const name = (<HTMLInputElement>document.getElementById("name-input")).value
       const passcode = (<HTMLInputElement>document.getElementById("magic-word-input")).value
 
@@ -37,7 +40,7 @@ export default {
       backgroundMusic.loop = true
       backgroundMusic.play()
 
-      router.state.name = name
+      this.router.state.name = name
       return "starting"
     }
   },
@@ -124,5 +127,6 @@ export default {
     html = EndingPage
     background = "ending"
     containerClass = "message-page"
+    constructor(private router: Router) {}
   },
 } as Routes
