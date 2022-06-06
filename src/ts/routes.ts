@@ -127,6 +127,5 @@ export default {
     html = EndingPage
     background = "ending"
     containerClass = "message-page"
-    constructor(private router: Router) {}
   },
 } as Routes

@@ -1,4 +1,4 @@
-import { Route, Routes, State } from "./types"
+import { Routes, State } from "./types"
 
 export default class Router {
   routes: Routes
