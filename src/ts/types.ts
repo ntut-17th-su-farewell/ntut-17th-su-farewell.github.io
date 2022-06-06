@@ -15,7 +15,7 @@ export type Route = {
   html: string
   background: string | ((router: Router) => string)
   initialize?: (router: Router) => void
-  buttonClickHandler?: ButtonClickHandler | { initialize: (router: Router) => void; run: ButtonClickHandler }
+  buttonClickHandler?: ButtonClickHandler
   containerClass: string
 }
 export type Routes = { [key: string]: Route }

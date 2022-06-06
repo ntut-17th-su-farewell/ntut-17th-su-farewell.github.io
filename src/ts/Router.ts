@@ -25,9 +25,7 @@ export default class Router {
 
     if (newRoute.initialize != undefined) newRoute.initialize(this)
     if (newRoute.buttonClickHandler != undefined) {
-      const buttonClickHandler = (
-        "run" in newRoute.buttonClickHandler ? newRoute.buttonClickHandler.run : newRoute.buttonClickHandler
-      ).bind(newRoute)
+      const buttonClickHandler = newRoute.buttonClickHandler.bind(newRoute)
 
       document.getElementById("button")!.onclick = () => {
         const newPath = buttonClickHandler(this)
