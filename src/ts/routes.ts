@@ -120,8 +120,6 @@ export default {
 
       this.router.setBackground(`${this.router.state.name}/${this.currentMessageIndex + 1}`)
     }
-
-
   },
   ending: {
     html: EndingPage,
