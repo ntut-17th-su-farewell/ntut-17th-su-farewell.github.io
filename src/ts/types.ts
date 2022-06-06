@@ -16,6 +16,7 @@ export abstract class Route {
   abstract background: string | ((router: Router) => string)
   abstract containerClass: string
   buttonClickHandler?: ButtonClickHandler
+  initialize?: () => void
 }
 export type Routes = { [key: string]: new (router: Router) => Route }
 

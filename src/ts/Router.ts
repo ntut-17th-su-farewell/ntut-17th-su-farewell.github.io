@@ -23,9 +23,11 @@ export default class Router {
     this.state.containerEl.innerHTML = newRoute.html
     this.setBackground(typeof newRoute.background == "string" ? newRoute.background : newRoute.background(this))
 
-    const buttonClickHandler = newRoute.buttonClickHandler
+    if (newRoute.initialize != undefined) newRoute.initialize()
 
-    if (buttonClickHandler != undefined) {
+    if (newRoute.buttonClickHandler != undefined) {
+      const buttonClickHandler = newRoute.buttonClickHandler.bind(newRoute)
+
       document.getElementById("button")!.onclick = () => {
         const newPath = buttonClickHandler(this)
         if (newPath != null) this.push(newPath)

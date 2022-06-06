@@ -56,12 +56,32 @@ export default {
     containerClass = "message-page"
 
     currentMessageIndex = 0
-    messageBox: MessageBox
-    messageContentEls: HTMLDivElement[]
-    router: Router
+    messageBox: MessageBox | undefined
+    messageContentEls: HTMLDivElement[] | undefined
 
-    constructor(router: Router) {
-      const messageBox = findMessageBox(router.state.name!)
+    constructor(private router: Router) {}
+
+    displayNextMessage() {
+      const currentMessageContentEl = this.messageContentEls![this.currentMessageIndex]
+      // https://stackoverflow.com/a/31862081
+      const triggerReflow = () => getComputedStyle(currentMessageContentEl).transform
+
+      if (this.currentMessageIndex == 0) {
+        currentMessageContentEl.style.transition = "none"
+        triggerReflow()
+        currentMessageContentEl.classList.remove("next")
+        triggerReflow()
+        currentMessageContentEl.style.transition = ""
+      } else {
+        this.messageContentEls![this.currentMessageIndex - 1].classList.add("previous")
+        currentMessageContentEl.classList.remove("next")
+      }
+
+      this.router.setBackground(`${this.router.state.name}/${this.currentMessageIndex + 1}`)
+    }
+
+    initialize() {
+      const messageBox = findMessageBox(this.router.state.name!)
       const messageContainerEl = document.getElementById("message-container") as HTMLDivElement
 
       messageContainerEl.innerHTML = messageBox.messages
@@ -88,34 +108,14 @@ export default {
 
       this.messageBox = messageBox
       this.messageContentEls = messageContentEls
-      this.router = router
 
       // this.displayNextMessage() requires this.messageContentEls
       this.displayNextMessage()
     }
 
-    displayNextMessage() {
-      const currentMessageContentEl = this.messageContentEls[this.currentMessageIndex]
-      // https://stackoverflow.com/a/31862081
-      const triggerReflow = () => getComputedStyle(currentMessageContentEl).transform
-
-      if (this.currentMessageIndex == 0) {
-        currentMessageContentEl.style.transition = "none"
-        triggerReflow()
-        currentMessageContentEl.classList.remove("next")
-        triggerReflow()
-        currentMessageContentEl.style.transition = ""
-      } else {
-        this.messageContentEls[this.currentMessageIndex - 1].classList.add("previous")
-        currentMessageContentEl.classList.remove("next")
-      }
-
-      this.router.setBackground(`${this.router.state.name}/${this.currentMessageIndex + 1}`)
-    }
-
     buttonClickHandler() {
       this.currentMessageIndex++
-      if (this.currentMessageIndex < this.messageBox.messages.length) {
+      if (this.currentMessageIndex < this.messageBox!.messages.length) {
         this.displayNextMessage()
         return null
       } else {
