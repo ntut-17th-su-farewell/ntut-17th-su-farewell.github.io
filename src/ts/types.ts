@@ -18,6 +18,6 @@ export type Route = {
   containerClass: string
 }
 export type RouteClass = Route & { new (route: Router): Route & { buttonClickHandler: ButtonClickHandler } }
-export type Routes = { [key: string]: Route }
+export type Routes = { [key: string]: Route | RouteClass }
 
 export type MessageBox = { passcode: string; messages: string[] }

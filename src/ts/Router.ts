@@ -23,7 +23,7 @@ export default class Router {
     this.state.containerEl.innerHTML = newRoute.html
     this.setBackground(typeof newRoute.background == "string" ? newRoute.background : newRoute.background(this))
 
-    const buttonClickHandler = this.getButtonClickHandler(newRoute as Route & RouteClass)
+    const buttonClickHandler = this.getButtonClickHandler(newRoute)
 
     if (buttonClickHandler != undefined) {
       document.getElementById("button")!.onclick = () => {
@@ -39,9 +39,9 @@ export default class Router {
     })`
   }
 
-  getButtonClickHandler(route: Route & RouteClass) {
+  getButtonClickHandler(route: Route | RouteClass) {
     if (Object.getOwnPropertyDescriptor(route, "prototype") != undefined) {
-      const routeInstance = new route(this)
+      const routeInstance = new (route as RouteClass)(this)
       return routeInstance.buttonClickHandler.bind(routeInstance)
     } else {
       return route.buttonClickHandler
