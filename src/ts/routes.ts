@@ -11,22 +11,22 @@ function findMessageBox(name: string): MessageBox {
 }
 
 export default {
-  "": {
-    html: LandingPage,
-    background: "index.png",
-    containerClass: "index-page",
-    buttonClickHandler: function (router) {
+  "": class implements Route {
+    html = LandingPage
+    background = "index.png"
+    containerClass = "index-page"
+    buttonClickHandler(router: Router) {
       const name = (<HTMLInputElement>document.getElementById("name-input")).value
       const passcode = (<HTMLInputElement>document.getElementById("magic-word-input")).value
 
       if (!Object.keys(messageBoxes).includes(name)) {
         alert("名字輸入錯了 QAQ")
-        return
+        return null
       }
 
       if (findMessageBox(name).passcode != passcode) {
         alert("通關密語錯了，偷看壞壞哦！")
-        return
+        return null
       }
 
       // Cache background images
@@ -39,18 +39,18 @@ export default {
 
       router.state.name = name
       return "starting"
-    },
+    }
   },
-  starting: {
-    html: StartingPage,
-    background: "index.png",
-    containerClass: "message-page",
-    buttonClickHandler: () => "messages",
+  starting: class implements Route {
+    html = StartingPage
+    background = "index.png"
+    containerClass = "message-page"
+    buttonClickHandler = () => "messages"
   },
   messages: class {
-    static html = MessagesPage
-    static background = (router: Router) => `${router.state.name}/1`
-    static containerClass = "message-page"
+    html = MessagesPage
+    background = (router: Router) => `${router.state.name}/1`
+    containerClass = "message-page"
 
     currentMessageIndex = 0
     messageBox: MessageBox
@@ -120,9 +120,9 @@ export default {
       }
     }
   },
-  ending: {
-    html: EndingPage,
-    background: "ending",
-    containerClass: "message-page",
+  ending: class implements Route {
+    html = EndingPage
+    background = "ending"
+    containerClass = "message-page"
   },
 } as Routes
