@@ -39,12 +39,12 @@ export default class Router {
     })`
   }
 
-  getButtonClickHandler(route: Route & RouteClass): ButtonClickHandler {
-    if (Object.getOwnPropertyDescriptor(route, "prototype")?.writable) {
+  getButtonClickHandler(route: Route & RouteClass) {
+    if (Object.getOwnPropertyDescriptor(route, "prototype") != undefined) {
       const routeInstance = new route(this)
-      return routeInstance.buttonClickHandler
+      return routeInstance.buttonClickHandler.bind(routeInstance)
     } else {
-      return route.buttonClickHandler ?? (() => null)
+      return route.buttonClickHandler
     }
   }
 }
