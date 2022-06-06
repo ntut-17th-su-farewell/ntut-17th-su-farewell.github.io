@@ -53,4 +53,5 @@ export default {
     historyApiFallback: true,
   },
   devtool: "source-map",
+  performance: { hints: false },
 }
