@@ -1,4 +1,4 @@
-import { ButtonClickHandler, Routes, State } from "./types"
+import { ButtonClickHandler, Route, RouteClass, Routes, State } from "./types"
 
 export default class Router {
   routes: Routes
@@ -18,19 +18,16 @@ export default class Router {
     this.state.currentPath = path
 
     const newRoute = this.routes[path]
-    console.log(newRoute)
 
     this.state.containerEl.className = newRoute.containerClass
     this.state.containerEl.innerHTML = newRoute.html
     this.setBackground(typeof newRoute.background == "string" ? newRoute.background : newRoute.background(this))
 
-    if (newRoute.buttonClickHandler != undefined) {
-      const buttonClickHandler = this.getButtonClickHandler(newRoute.buttonClickHandler)
+    const buttonClickHandler = this.getButtonClickHandler(newRoute as Route & RouteClass)
 
-      document.getElementById("button")!.onclick = () => {
-        const newPath = buttonClickHandler(this)
-        if (newPath != null) this.push(newPath)
-      }
+    document.getElementById("button")!.onclick = () => {
+      const newPath = buttonClickHandler(this)
+      if (newPath != null) this.push(newPath)
     }
   }
 
@@ -40,15 +37,12 @@ export default class Router {
     })`
   }
 
-  getButtonClickHandler(handler: any): ButtonClickHandler {
-    const handlerPrototype = Object.getOwnPropertyDescriptor(handler, "prototype")
-
-    // handlerPrototype == undefined if it is an arrow function
-    if (handlerPrototype != undefined && handlerPrototype.writable == false) {
-      const handlerInstance = new handler(this)
-      return handlerInstance.run.bind(handlerInstance)
+  getButtonClickHandler(route: Route & RouteClass): ButtonClickHandler {
+    if (Object.getOwnPropertyDescriptor(route, "prototype")?.writable) {
+      const routeInstance = new route(this)
+      return routeInstance.buttonClickHandler
     } else {
-      return handler
+      return route.buttonClickHandler ?? (() => null)
     }
   }
 }
