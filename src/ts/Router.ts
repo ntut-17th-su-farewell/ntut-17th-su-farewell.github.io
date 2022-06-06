@@ -1,4 +1,4 @@
-import { ButtonClickHandler, Routes, State } from "./types"
+import { Routes, State } from "./types"
 
 export default class Router {
   routes: Routes
@@ -23,19 +23,17 @@ export default class Router {
     this.state.containerEl.innerHTML = newRoute.html
     this.setBackground(typeof newRoute.background == "string" ? newRoute.background : newRoute.background(this))
 
-    if (newRoute.initialize != undefined) newRoute.initialize(this)
-    if (newRoute.buttonClickHandler != undefined) {
-      const buttonClickHandler = newRoute.buttonClickHandler.bind(newRoute)
-
+    if ("initialize" in newRoute) newRoute.initialize(this)
+    if ("buttonClickHandler" in newRoute) {
       document.getElementById("button")!.onclick = () => {
-        const newPath = buttonClickHandler(this)
+        const newPath = newRoute.buttonClickHandler!(this)
         if (newPath != null) this.push(newPath)
       }
     }
   }
 
   setBackground(imagePath: string) {
-    this.state.containerEl.style.backgroundImage = `url(img/backgrounds/${
+    this.state.containerEl.style.backgroundImage = `url(/assets/img/backgrounds/${
       imagePath.includes(".") ? imagePath : imagePath + ".jpg"
     })`
   }

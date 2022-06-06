@@ -1,5 +1,6 @@
 import messageBoxes from "../data/message-boxes.json"
 import EndingPage from "../html/ending.html"
+import FeedbackPage from "../html/feedback.html"
 import LandingPage from "../html/landing.html"
 import MessagesPage from "../html/message.html"
 import StartingPage from "../html/starting.html"
@@ -30,10 +31,10 @@ export default {
       }
 
       // Cache background images
-      for (let i = 1; i <= 4; i++) new Image().src = `img/backgrounds/${name}/${i}.jpg`
-      new Image().src = `img/backgrounds/ending.jpg`
+      for (let i = 1; i <= 4; i++) new Image().src = `/assets/img/backgrounds/${name}/${i}.jpg`
+      new Image().src = `/assets/img/backgrounds/ending.jpg`
 
-      const backgroundMusic = new Audio("/music/background-music.mp3")
+      const backgroundMusic = new Audio("/assets/audio/background-music.mp3")
       backgroundMusic.loop = true
       backgroundMusic.play()
 
@@ -44,13 +45,13 @@ export default {
   starting: {
     html: StartingPage,
     background: "index.png",
-    containerClass: "message-page",
+    containerClass: "page-with-text-content",
     buttonClickHandler: () => "messages",
   },
   messages: class {
     static html = MessagesPage
     static background = router => `${router.state.name}/1`
-    static containerClass = "message-page"
+    static containerClass = "page-with-text-content"
 
     static currentMessageIndex = 0
     static messageBox: MessageBox
@@ -124,6 +125,12 @@ export default {
   ending: {
     html: EndingPage,
     background: "ending",
-    containerClass: "message-page",
+    containerClass: "page-with-text-content",
+    buttonClickHandler: () => "feedback",
+  },
+  feedback: {
+    html: FeedbackPage,
+    background: "ending",
+    containerClass: "page-with-text-content",
   },
 } as Routes

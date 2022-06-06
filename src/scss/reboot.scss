@@ -1,1 +1,8 @@
-@use "~bootstrap/scss/bootstrap-reboot.scss";
+@import "~bootstrap/scss/functions";
+
+@import "~bootstrap/scss/variables";
+$font-family-sans-serif: "Custom font", #{$font-family-sans-serif};
+
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/reboot";

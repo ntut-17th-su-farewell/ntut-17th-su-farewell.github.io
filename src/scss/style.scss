@@ -1,7 +1,5 @@
+@use "./font.scss";
 @use "./reboot.scss";
-
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
 
 body,
 html {
@@ -56,7 +54,7 @@ html {
     }
   }
 
-  &.message-page {
+  &.page-with-text-content {
     padding: 3rem;
     transition: background 500ms;
 
@@ -117,7 +115,7 @@ html {
   }
 
   #button {
-    height: 2.25rem;
+    height: 2.5rem;
     cursor: pointer;
   }
 }
