@@ -25,9 +25,11 @@ export default class Router {
 
     const buttonClickHandler = this.getButtonClickHandler(newRoute as Route & RouteClass)
 
-    document.getElementById("button")!.onclick = () => {
-      const newPath = buttonClickHandler(this)
-      if (newPath != null) this.push(newPath)
+    if (buttonClickHandler != undefined) {
+      document.getElementById("button")!.onclick = () => {
+        const newPath = buttonClickHandler(this)
+        if (newPath != null) this.push(newPath)
+      }
     }
   }
 
