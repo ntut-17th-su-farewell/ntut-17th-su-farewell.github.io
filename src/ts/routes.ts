@@ -31,8 +31,8 @@ export default {
       }
 
       // Cache background images
-      for (let i = 1; i <= 4; i++) new Image().src = `/assets/img/backgrounds/${name}/${i}.jpg`
-      new Image().src = `/assets/img/backgrounds/ending.jpg`
+      for (let i = 1; i <= 4; i++) new Image().src = `/assets/img/backgrounds/${name}/${i}.webp`
+      new Image().src = `/assets/img/backgrounds/ending.webp`
 
       const backgroundMusic = new Audio("/assets/audio/background-music.mp3")
       backgroundMusic.loop = true

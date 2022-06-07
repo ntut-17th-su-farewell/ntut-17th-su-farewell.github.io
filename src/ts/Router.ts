@@ -34,7 +34,7 @@ export default class Router {
 
   setBackground(imagePath: string) {
     this.state.containerEl.style.backgroundImage = `url(/assets/img/backgrounds/${
-      imagePath.includes(".") ? imagePath : imagePath + ".jpg"
+      imagePath.includes(".") ? imagePath : imagePath + ".webp"
     })`
   }
 }
