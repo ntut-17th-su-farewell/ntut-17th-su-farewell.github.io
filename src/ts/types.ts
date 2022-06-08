@@ -2,6 +2,7 @@ import Router from "./Router"
 
 export type State = {
   name: string | null
+  messageBox: MessageBox | null
   currentPath?: string
   containerEl: HTMLDivElement
 }

@@ -7,10 +7,6 @@ import StartingPage from "../html/starting.html"
 import Router from "./Router"
 import { MessageBox, Routes } from "./types"
 
-function findMessageBox(name: string): MessageBox {
-  return messageBoxes[name as keyof typeof messageBoxes]
-}
-
 export default {
   "": {
     html: LandingPage,
@@ -20,12 +16,14 @@ export default {
       const name = (<HTMLInputElement>document.getElementById("name-input")).value
       const passcode = (<HTMLInputElement>document.getElementById("magic-word-input")).value
 
-      if (!Object.keys(messageBoxes).includes(name)) {
+      if (!(name in messageBoxes)) {
         alert("名字輸入錯了 QAQ")
         return
       }
 
-      if (findMessageBox(name).passcode != passcode) {
+      const messageBox = messageBoxes[name as keyof typeof messageBoxes]
+
+      if (messageBox.passcode != passcode) {
         alert("通關密語錯了，偷看壞壞哦！")
         return
       }
@@ -39,6 +37,7 @@ export default {
       backgroundMusic.play()
 
       router.state.name = name
+      router.state.messageBox = messageBox
       return "starting"
     },
   },
@@ -59,8 +58,13 @@ export default {
     static router: Router
 
     static initialize(router: Router) {
-      const messageBox = findMessageBox(router.state.name!)
+      const messageBox = router.state.messageBox
       const messageContainerEl = document.getElementById("message-container") as HTMLDivElement
+
+      if (messageBox == null) {
+        router.push("name")
+        return
+      }
 
       messageContainerEl.innerHTML = messageBox.messages
         .map(
