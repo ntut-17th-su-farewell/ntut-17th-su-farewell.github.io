@@ -13,7 +13,7 @@ export default {
       const passcode = (<HTMLInputElement>document.getElementById("magic-word-input")).value
 
       if (!(name in messageBoxes)) {
-        alert("名字輸入錯了 QAQ")
+        alert("不可能連自己名字都輸錯吧...")
         return null
       }
 
