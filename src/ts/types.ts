@@ -7,18 +7,15 @@ export type State = {
   containerEl: HTMLDivElement
 }
 
-export type ButtonClickHandler = (router: Router) => string | null
-export abstract class StatefulButtonClickHandler {
-  abstract run: ButtonClickHandler
+export class Route {
+  constructor(
+    public html: string,
+    public containerClass: string,
+    public background: string | (() => string),
+    public buttonClickHandler?: (router: Router) => string | null,
+    public initialize?: () => void
+  ) {}
 }
-
-export type Route = {
-  html: string
-  background: string | ((router: Router) => string)
-  initialize?: (router: Router) => void
-  buttonClickHandler?: ButtonClickHandler
-  containerClass: string
-}
-export type Routes = { [key: string]: Route }
+export type Routes = { [key: string]: (router: Router) => Route | undefined }
 
 export type MessageBox = { passcode: string; messages: string[] }

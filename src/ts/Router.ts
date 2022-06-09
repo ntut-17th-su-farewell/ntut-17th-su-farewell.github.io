@@ -17,14 +17,16 @@ export default class Router {
     history.pushState({}, "", path)
     this.state.currentPath = path
 
-    const newRoute = this.routes[path]
+    const newRoute = this.routes[path](this)
+
+    if (newRoute == undefined) return
 
     this.state.containerEl.className = newRoute.containerClass
     this.state.containerEl.innerHTML = newRoute.html
-    this.setBackground(typeof newRoute.background == "string" ? newRoute.background : newRoute.background(this))
+    this.setBackground(typeof newRoute.background == "string" ? newRoute.background : newRoute.background())
 
-    if ("initialize" in newRoute) newRoute.initialize(this)
-    if ("buttonClickHandler" in newRoute) {
+    if (newRoute.initialize != undefined) newRoute.initialize()
+    if (newRoute.buttonClickHandler != undefined) {
       document.getElementById("button")!.onclick = () => {
         const newPath = newRoute.buttonClickHandler!(this)
         if (newPath != null) this.push(newPath)
